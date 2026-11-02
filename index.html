@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хакатон: Генератор идей</title>
+    <!-- Подключение Tailwind CSS напрямую для скорости -->
+    <script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-slate-900 text-white flex flex-col items-center justify-center min-h-screen p-4 font-sans">
+
+    <h1 class="text-4xl md:text-5xl font-bold mb-8 text-center text-cyan-400">Генератор идей для хакатона</h1>
+
+    <!-- Блок таймера -->
+    <div class="bg-slate-800 border border-slate-700 p-6 rounded-xl shadow-2xl mb-10 text-center w-full max-w-md">
+        <h2 class="text-lg text-slate-400 mb-2 uppercase tracking-wider font-semibold">До конца кодинга:</h2>
+        <div id="timer" class="text-6xl font-mono text-emerald-400 font-bold tracking-tighter">24:00:00</div>
+    </div>
+
+    <!-- Блок генератора -->
+    <div class="bg-slate-800 border border-slate-700 p-8 rounded-xl shadow-2xl text-center w-full max-w-3xl">
+        <p id="idea-display" class="text-2xl text-slate-200 mb-8 min-h-[100px] flex items-center justify-center">
+            Нажми кнопку, чтобы получить идею для проекта!
+        </p>
+        <button id="generate-btn" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-4 px-10 rounded-full transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(8,145,178,0.5)]">
+            Сгенерировать идею
+        </button>
+    </div>
+
+    <script>
+        // 1. Логика генератора
+        const ideas = [
+            "Умный мусорный бак с компьютерным зрением (CV) для сортировки отходов.",
+            "Телеграм-бот для онбординга новых сотрудников с использованием RAG-архитектуры.",
+            "Платформа для шеринга инструментов между соседями по району.",
+            "Web-приложение, переводящее язык жестов в текст через веб-камеру.",
+            "Геймифицированный трекер подготовки к ЕНТ для старшеклассников."
+        ];
+
+        const btn = document.getElementById('generate-btn');
+        const display = document.getElementById('idea-display');
+
+        btn.addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * ideas.length);
+            display.innerText = ideas[randomIndex];
+            
+            // ИИ добавил вызов анимации, но "забыл" подключить саму библиотеку
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        });
+
+        // 2. Логика таймера на 24 часа
+        let timeLeft = 24 * 60 * 60; 
+        const timerDisplay = document.getElementById('timer');
+
+        setInterval(() => {
+            if (timeLeft <= 0) return;
+            timeLeft--;
+            const h = String(Math.floor(timeLeft / 3600)).padStart(2, '0');
+            const m = String(Math.floor((timeLeft % 3600) / 60)).padStart(2, '0');
+            const s = String(timeLeft % 60).padStart(2, '0');
+            timerDisplay.innerText = `${h}:${m}:${s}`;
+        }, 1000);
+    </script>
+</body>
+</html>
